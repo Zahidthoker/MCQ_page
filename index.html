@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>MCQ Ranking</title>
+</head>
+<body>
+    <h1 id="heading">MCQ Quiz</h1>
+    <div class="timer">
+        <h1>Time Left</h1>
+        <p id="timeLeft">00:00</p>
+    </div>
+        <div id="progress-bar">
+        <div id="progress">
+            <h6>0%</h6>
+            <h6 id="progress-value"></h6>
+        </div>
+    </div>
+    <div class="main-body">
+        <div class="question-numbers">
+            <p id="question-number"></p>
+        </div>
+        <div id="quiz-container">            
+            <div id="quiz"></div>
+            <div>
+                <button class="nav-btn prev"><< prev</button>
+                <button class="nav-btn next">next >></button>
+                <button class="review">Review</button>
+            </div>
+        </div>
+        <div  id="top-scores">
+            <h2> Top Scores </h2>
+            <div id="top-score">
+                <div id="rank"><p style="font-size: 1.2rem; font-weight: bold;">Rank</p></div>
+                <div id="score"><p style="font-size:1.2rem;font-weight: bold;">Score</p></div>
+            </div>
+
+        </div>
+    </div>
+    <p id="result"> </p>
+    <div class="buttons">
+        <button id="submit">Submit</button>
+        <button id="reset" style="display: none;">Reset</button>
+    </div>
+    
+
+    <script src="script.js"></script>
+</body>
+</html>
