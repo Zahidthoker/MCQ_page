@@ -37,7 +37,7 @@ let answers = Array(quizData.length).fill(null);
 const progress = document.getElementById('progress');
 let submitted = false;
 let checkedQuestions = [];
-let completed = 0;
+let completed = [];
 const progressValue = document.getElementById('progress-value');
 
 function loadQuiz(){
@@ -64,6 +64,8 @@ function loadQuiz(){
             prevSelection.checked=true;
         }
     }
+
+
     
 
 }
@@ -74,7 +76,6 @@ function saveAnswers(){
         if(selected){
             answers[index]=selected.value;
         }
-        progressBar();
 
 }
 
@@ -109,7 +110,8 @@ function getScore(){
     const yourScore = JSON.parse(localStorage.getItem('scores')) || [];
     yourScore.push([score,timeTaken]);
     localStorage.setItem('scores',JSON.stringify(yourScore));
-    progressBar();
+    saveScore();
+   
 }
 
 function timeLeft(){
@@ -154,8 +156,8 @@ document.querySelectorAll('input[type=radio]').forEach(radio=>{
 
 //save score to local storage
 function saveScore(score){
-    rank.innerHTML += '';
-    scoreEl.innerHTML+= '';
+    rank.innerHTML  = '';
+    scoreEl.innerHTML = '';
     const scores = JSON.parse(localStorage.getItem('scores')) || [];
     if(score !== undefined){
         scores.push(score);
@@ -212,41 +214,54 @@ next.addEventListener('click',()=>{
 
 })
 
-//Progress Bar
-function progressBar(){
-    const check =document.querySelectorAll('input[type=radio]:checked')
-    if(check.length>0){
-    if(checkedQuestions.includes(check[0].name)){
-        progress.style.width = completed*100/quizData.length+'%';
+
+
+//Change progress bar when question is attempted
+document.addEventListener('change',(e)=>{
+    if(e.target.matches('input[type=radio]')){
+        const currentQ=`num${index+1}`
+        if(!completed.includes(currentQ)){
+            completed.push(`num${index+1}`)
+            progress.style.width = (completed.length)*100/quizData.length+'%';
+            progressValue.textContent = `${(completed.length)*100/quizData.length}%`;
+        }
+        
     }
-    else{
-        completed++;
-        checkedQuestions.push(check[0].name);
-        progress.style.width = completed*100/quizData.length+'%';
-        progressValue.textContent = `${completed*100/quizData.length}%`;
-    }
-}
-}
+})
 
 // question number indexs
-function questionNumbers(){
+function questionNumbers() {
     const numberOfQuestions = quizData.length;
-    const quuestionNumberEl = document.getElementById('question-number');
-    for(let i=0;i<numberOfQuestions;i++){
-        const buttons = `<button id="question-numbers num${i+1}">${i+1}</button>`;
-        quuestionNumberEl.innerHTML += buttons;
-    }
-}
+    const questionNumberEl = document.getElementById('question-number');
+        for(let i =0;i<numberOfQuestions;i++){
+            const button = document.createElement('button');
+            button.className='question-number';
+            button.id = `num${i+1}`;
+            button.innerText=i+1;
 
-document.querySelectorAll('#question-numbers').forEach((button,i)=>{
-    button.addEventListener('click',()=>{
-        index=i;
-        loadQuiz();
-    })
+            button.addEventListener('click',()=>{
+            index=i;
+            loadQuiz();
+        })
+            questionNumberEl.appendChild(button)
+        }
+        
+
+    }
+
+
+//change color of question number when attempted
+document.addEventListener('change',(e)=>{
+    if(e.target.matches('input[type=radio]')){
+        const currentQ = document.getElementById(`num${index+1}`);
+        currentQ.style.backgroundColor='green';
+        currentQ.style.color='white';
+    }
 })
 
 const review = document.querySelector('.review');
 review.addEventListener('click',()=>{
-        const button = document.getElementById(`question-numbers num${index+1}`);
+        const button = document.getElementById(`num${index+1}`);
         button.style.backgroundColor = 'rgba(237, 235, 73, 1)';
+        button.style.color = 'black';
 });
