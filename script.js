@@ -18,6 +18,26 @@ const quizData = [
         question: 'What year was JavaScript launched?',
         options:['1996','1995','1994','none of the above'],
         correct: '1995',
+    },
+     {
+        question: 'Which language runs in a web browser?',
+        options:['Java','C','Python','JavaScript'],
+        correct: 'JavaScript',
+    },
+    {
+        question: 'What does CSS stand for?',
+        options:['Central Style Sheets','Cascading Style Sheets','Cascading Simple Sheets','Cars SUVs Sailboats'],
+        correct: 'Cascading Style Sheets',
+    },
+    {
+        question: 'What does HTML stand for?',
+        options:['Hypertext Markup Language','Hypertext Markdown Language','Hyperloop Machine Language','Helicopters Terminals Motorboats Lamborginis'],
+        correct: 'Hypertext Markup Language',
+    },
+    {
+        question: 'What year was JavaScript launched?',
+        options:['1996','1995','1994','none of the above'],
+        correct: '1995',
     }
 ]
 
@@ -39,6 +59,7 @@ let submitted = false;
 let checkedQuestions = [];
 let completed = [];
 const progressValue = document.getElementById('progress-value');
+const timeContainer = document.getElementById('timeTaken');
 
 function loadQuiz(){
     reset.style.display = 'none';
@@ -65,7 +86,7 @@ function loadQuiz(){
         }
     }
 
-
+    disableOptions();
     
 
 }
@@ -163,12 +184,22 @@ function saveScore(score){
         scores.push(score);
         localStorage.setItem('scores',JSON.stringify(scores));
     }
-   scores.sort((a,b)=>b[0]-a[0]);
-   scores.forEach((sc,index)=>{if(index<10){
-       const rankEl = `<div style="margin-top: 10px;">${index+1}</div> `
-       const ScoreEl = `<div style="margin-top: 10px;">${sc[0]}</div>`
-       rank.innerHTML += rankEl;
-       scoreEl.innerHTML += ScoreEl
+    scores.sort((a,b)=>{
+        if(b[0]===a[0]){
+            return a[1]-b[1];
+        }
+        return b[0]-a[0];
+    });
+    scores.forEach((sc,index)=>{if(index<10){
+        const minutes = Math.floor(sc[1]/60);
+        const seconds = sc[1]%60;
+        
+        const rankEl = `<div style="margin-top: 10px;">${index+1}</div> `
+        const ScoreEl = `<div style="margin-top: 10px;">${sc[0]}</div>`
+        const timeEl = `<div style="margin-top: 10px;">${minutes}:${seconds<10?'0':''}${seconds}</div>`
+        rank.innerHTML += rankEl;
+        scoreEl.innerHTML += ScoreEl;
+        timeContainer.innerHTML += timeEl;
        }
    })
 }
@@ -188,12 +219,7 @@ prev.addEventListener('click',()=>{
         index--;
         loadQuiz();
     }
-    if(submitted){
-        document.querySelectorAll('input[type=radio]').forEach(radio=>{
-        radio.disabled=true;
-        reset.style.display = 'block';
-    })
-    }
+    disableOptions();
 })
 
 
@@ -204,13 +230,7 @@ next.addEventListener('click',()=>{
         index++;
         loadQuiz();
     }
-    if(submitted){
-        document.querySelectorAll('input[type=radio]').forEach(radio=>{
-        radio.disabled=true;
-        reset.style.display = 'block';
-
-    })
-    }
+    disableOptions();
 
 })
 
@@ -238,6 +258,8 @@ function questionNumbers() {
             button.className='question-number';
             button.id = `num${i+1}`;
             button.innerText=i+1;
+            button.style.backgroundColor='#B0B0B0';
+            button.style.color='#000000'
 
             button.addEventListener('click',()=>{
             index=i;
@@ -254,14 +276,32 @@ function questionNumbers() {
 document.addEventListener('change',(e)=>{
     if(e.target.matches('input[type=radio]')){
         const currentQ = document.getElementById(`num${index+1}`);
-        currentQ.style.backgroundColor='green';
-        currentQ.style.color='white';
+        currentQ.style.backgroundColor='#28A745';
+        currentQ.style.color='#ffffff';
     }
 })
 
 const review = document.querySelector('.review');
 review.addEventListener('click',()=>{
         const button = document.getElementById(`num${index+1}`);
-        button.style.backgroundColor = 'rgba(237, 235, 73, 1)';
-        button.style.color = 'black';
+        const checked = document.querySelectorAll('input[type=radio]:checked');
+        if(checked.length>0){
+            button.style.backgroundColor =' #6F42C1';
+            button.style.color = 'white';
+        }else{
+            button.style.backgroundColor = '#FFC107';
+            button.style.color = 'black';
+        }
+        
 });
+
+
+//disable options after submit
+function disableOptions(){
+        if(submitted){
+        document.querySelectorAll('input[type=radio]').forEach(radio=>{
+        radio.disabled=true;
+        reset.style.display = 'block';
+    })
+    }
+}
