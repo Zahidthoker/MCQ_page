@@ -205,7 +205,30 @@ function saveScore(score){
 }
 
 //submit button
-submitBtn.addEventListener('click', getScore)
+submitBtn.addEventListener('click',()=>{
+    const promptScreen = document.createElement('div');
+    promptScreen.style.width = '400px';
+    promptScreen.style.height = '300px';
+    promptScreen.style.position = 'fixed';
+    promptScreen.style.top = '50%';
+    promptScreen.style.left = '50%';
+    promptScreen.style.transform = 'translate(-50%,-50%)';
+    promptScreen.style.justifyContent = 'center';
+    promptScreen.style.alignItems = 'center';
+    promptScreen.style.fontSize = '1.5rem';
+    promptScreen.style.color = 'white';
+    promptScreen.style.backgroundColor = 'rgba(0,0,0,0.7)';
+    const totalQuestions = quizData.length;
+    const attempted = completed.length;
+    const Unattempted = totalQuestions-attempted;
+    const timeTaken = (quizData.length*30-endTime);
+    promptScreen.innerHTML = `<p>Total Questions: ${totalQuestions}</p> <p>Attempted: ${attempted}</p>
+    <p>Unattempted: ${Unattempted}</p>
+    <p>Marked for Review: </p>
+    <p>Time taken: ${timeTaken<60?timeTaken +'s':timeTaken+'min'}</p>`
+    ;
+    document.body.appendChild(promptScreen);
+})// use getScore function
 
 //reset button
 reset.addEventListener('click',()=>{
