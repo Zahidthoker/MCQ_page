@@ -262,6 +262,7 @@ function questionNumbers() {
             button.style.color='#000000'
 
             button.addEventListener('click',()=>{
+            saveAnswers();
             index=i;
             loadQuiz();
         })
