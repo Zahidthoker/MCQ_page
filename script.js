@@ -132,6 +132,10 @@ function getScore(){
     yourScore.push([score,timeTaken]);
     localStorage.setItem('scores',JSON.stringify(yourScore));
     saveScore();
+
+    const promt = document.getElementById('promtscreen');
+    promt.style.display = "none";
+    
    
 }
 
@@ -207,26 +211,39 @@ function saveScore(score){
 //submit button
 submitBtn.addEventListener('click',()=>{
     const promptScreen = document.createElement('div');
-    promptScreen.style.width = '400px';
+    promptScreen.id="promtscreen";
+    promptScreen.style.width = '60vw';
     promptScreen.style.height = '300px';
     promptScreen.style.position = 'fixed';
     promptScreen.style.top = '50%';
     promptScreen.style.left = '50%';
+    promptScreen.style.display = "flex";
+    promptScreen.style.flexDirection="column";
     promptScreen.style.transform = 'translate(-50%,-50%)';
     promptScreen.style.justifyContent = 'center';
     promptScreen.style.alignItems = 'center';
     promptScreen.style.fontSize = '1.5rem';
     promptScreen.style.color = 'white';
-    promptScreen.style.backgroundColor = 'rgba(0,0,0,0.7)';
+    promptScreen.style.backgroundColor = 'rgba(0, 0, 0, 0.88)';
+    promptScreen.style.padding="15px"
+    promptScreen.style.boxShadow = " 0 0 10px 0 rgba(18, 17, 17, 0.2);"
+    const confirm = document.createElement('button');
+    confirm.textContent="Confirm";
     const totalQuestions = quizData.length;
     const attempted = completed.length;
     const Unattempted = totalQuestions-attempted;
     const timeTaken = (quizData.length*30-endTime);
+    const minutes = Math.floor(timeTaken/60);
+    const seconds = timeTaken%60;
     promptScreen.innerHTML = `<p>Total Questions: ${totalQuestions}</p> <p>Attempted: ${attempted}</p>
     <p>Unattempted: ${Unattempted}</p>
     <p>Marked for Review: </p>
-    <p>Time taken: ${timeTaken<60?timeTaken +'s':timeTaken+'min'}</p>`
+    <p>Time taken: ${minutes} minutes and ${seconds<10?'0':''}${seconds} seconds </p>
+    <p style ="font-weight:bold; color:red;">Confirm and submit</p>`
+    
     ;
+    promptScreen.appendChild(confirm);
+    confirm.addEventListener("click",getScore);
     document.body.appendChild(promptScreen);
 })// use getScore function
 
