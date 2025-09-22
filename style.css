@@ -161,12 +161,20 @@ button:hover:active{
 }
 
 .rankHeading{
+    min-height: 65px;
     font-size: larger;
     color: rgb(104, 13, 13);
     font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .scoreHeading{
     font-size: larger;
     color: rgb(104, 13, 13);
     font-weight: bold;
+    min-height: 65px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
