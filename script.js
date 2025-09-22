@@ -60,6 +60,7 @@ let checkedQuestions = [];
 let completed = [];
 const progressValue = document.getElementById('progress-value');
 const timeContainer = document.getElementById('timeTaken');
+const reviewed = [];
 
 function loadQuiz(){
     reset.style.display = 'none';
@@ -183,6 +184,7 @@ document.querySelectorAll('input[type=radio]').forEach(radio=>{
 function saveScore(score){
     rank.innerHTML  = '';
     scoreEl.innerHTML = '';
+    timeContainer.innerHTML = '';
     const scores = JSON.parse(localStorage.getItem('scores')) || [];
     if(score !== undefined){
         scores.push(score);
@@ -208,12 +210,12 @@ function saveScore(score){
    })
 }
 
-//submit button
+//submit button and prompt screen
 submitBtn.addEventListener('click',()=>{
     const promptScreen = document.createElement('div');
     promptScreen.id="promtscreen";
     promptScreen.style.width = '60vw';
-    promptScreen.style.height = '300px';
+    promptScreen.style.height = 'auto';
     promptScreen.style.position = 'fixed';
     promptScreen.style.top = '50%';
     promptScreen.style.left = '50%';
@@ -228,6 +230,8 @@ submitBtn.addEventListener('click',()=>{
     promptScreen.style.padding="15px"
     promptScreen.style.boxShadow = " 0 0 10px 0 rgba(18, 17, 17, 0.2);"
     const confirm = document.createElement('button');
+    const cancel = document.createElement('button');
+    cancel.textContent = "Cancel";
     confirm.textContent="Confirm";
     const totalQuestions = quizData.length;
     const attempted = completed.length;
@@ -237,15 +241,19 @@ submitBtn.addEventListener('click',()=>{
     const seconds = timeTaken%60;
     promptScreen.innerHTML = `<p>Total Questions: ${totalQuestions}</p> <p>Attempted: ${attempted}</p>
     <p>Unattempted: ${Unattempted}</p>
-    <p>Marked for Review: </p>
+    <p>Marked for Review:${reviewed.length} </p>
     <p>Time taken: ${minutes} minutes and ${seconds<10?'0':''}${seconds} seconds </p>
     <p style ="font-weight:bold; color:red;">Confirm and submit</p>`
     
     ;
     promptScreen.appendChild(confirm);
+    promptScreen.appendChild(cancel);
+    cancel.addEventListener("click",()=>{
+        promptScreen.style.display = "none";
+    })
     confirm.addEventListener("click",getScore);
     document.body.appendChild(promptScreen);
-})// use getScore function
+})
 
 //reset button
 reset.addEventListener('click',()=>{
@@ -322,8 +330,11 @@ document.addEventListener('change',(e)=>{
     }
 })
 
+
+//Review button
 const review = document.querySelector('.review');
 review.addEventListener('click',()=>{
+        reviewed.push(`num${index+1}`);
         const button = document.getElementById(`num${index+1}`);
         const checked = document.querySelectorAll('input[type=radio]:checked');
         if(checked.length>0){
