@@ -251,7 +251,10 @@ submitBtn.addEventListener('click',()=>{
     cancel.addEventListener("click",()=>{
         promptScreen.style.display = "none";
     })
-    confirm.addEventListener("click",getScore);
+    confirm.addEventListener("click",()=>{
+        getScore();
+        promptScreen.style.display = "none";
+    });
     document.body.appendChild(promptScreen);
 })
 
